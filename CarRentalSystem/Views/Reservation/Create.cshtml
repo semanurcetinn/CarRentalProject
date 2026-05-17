@@ -1,0 +1,103 @@
+﻿@model CarRentalSystem.Models.Car
+
+<div class="container mt-5">
+    <div class="row">
+        
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h4 class="card-title fw-bold text-dark">@Model.CarBrand @Model.CarModel</h4>
+                    <hr />
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><strong>Plaka:</strong> <span class="badge bg-secondary">@Model.CarPlate</span></li>
+                        <li class="mb-2"><strong>Durum:</strong> <span class="badge bg-success">@Model.CarStatus</span></li>
+                        <li class="mb-2 fs-5">
+                            <strong>Günlük Fiyat:</strong> 
+                            <span id="dailyPrice" class="text-primary fw-bold">@Model.CarDailyPrice</span> ₺
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0">Kiralama Detaylarını Belirleyin</h5>
+                </div>
+
+                <img src="@Model.CarImageUrl" class="card-img-top" alt="Araç Görseli" style="object-fit: cover;">
+
+                <div class="card-body p-4">
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger list-unstyled mb-0" })
+                        </div>
+                    }
+
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" name="CarId" value="@Model.CarId" />
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Alış Tarihi</label>
+                                <input type="date" id="startDate" name="StartDate" class="form-control form-control-lg border-secondary" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Teslim Tarihi</label>
+                                <input type="date" id="endDate" name="EndDate" class="form-control form-control-lg border-secondary" required />
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info border-info d-flex justify-content-between align-items-center p-4 mb-4">
+                            <div>
+                                <h5 class="mb-1 text-info-emphasis">Hesaplanan Toplam Tutar</h5>
+                                <small class="text-muted">Seçtiğiniz tarihlere göre anlık hesaplanır.</small>
+                            </div>
+                            <h2 class="mb-0 fw-bold text-info-emphasis"><span id="totalAmountDisplay">0</span> ₺</h2>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3">
+                            Rezervasyonu Onayla ve Kirala
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // HTML'deki elementleri JavaScript değişkenlerine tanımlıyoruz
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+    const dailyPrice = parseFloat(document.getElementById('dailyPrice').innerText);
+
+    // Tarih kutularında herhangi bir değişiklik olduğunda CalculateTotal fonksiyonunu çalıştır
+    startDateInput.addEventListener('change', calculateTotal);
+    endDateInput.addEventListener('change', calculateTotal);
+
+    function calculateTotal() {
+        const start = new Date(startDateInput.value);
+        const end = new Date(endDateInput.value);
+
+        // İki tarih de seçilmişse ve bitiş tarihi başlangıçtan büyük/eşitse hesapla
+        if (startDateInput.value && endDateInput.value && end >= start) {
+            
+            // İki tarih arasındaki milisaniye farkını güne çeviriyoruz
+            const timeDifference = Math.abs(end - start);
+            let dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            
+            // Aynı gün iade edilecekse 1 gün say
+            if (dayDifference === 0) dayDifference = 1;
+
+            const total = dayDifference * dailyPrice;
+            totalAmountDisplay.innerText = total.toLocaleString('tr-TR'); // Türk Lirası formatında yazdır
+        } else {
+            totalAmountDisplay.innerText = "0";
+        }
+    }
+</script>

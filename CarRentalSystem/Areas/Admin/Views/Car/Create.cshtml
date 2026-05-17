@@ -1,0 +1,103 @@
+﻿@model CarRentalSystem.Models.Car
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top">
+                    <h3 class="mb-0 fw-bold">Yeni Araç Ekle</h3>
+                    <small class="text-light">Sisteme eklenecek aracın detaylarını giriniz</small>
+                </div>
+
+                <div class="card-body p-5">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="row g-4">
+
+                            <div class="mb-3">
+                                <label class="form-label">Durum</label>
+                                <select name="CarStatus" class="form-select" required>
+                                    <option value="Müsait" selected>Müsait</option>
+                                    <option value="Bakımda">Bakımda</option>
+                                    <option value="Kirada">Kirada</option>
+                                </select>
+                                <label class="form-label">Araç Görseli</label>
+                                <input type="file" name="CarImage" class="form-control" accept="image/*" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="CarPlate" class="form-control border-secondary" id="plateInput" placeholder="34 ABC 123" required />
+                                    <span class="text-danger">@Html.ValidationMessage("CarPlate")</span>
+                                    <label for="plateInput" class="text-muted">Araç Plakası</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" name="CarDailyPrice" class="form-control border-secondary" id="priceInput" placeholder="Fiyat" required />
+                                    <label for="priceInput" class="text-muted">Günlük Fiyat (₺)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="CarBrand" class="form-control border-secondary" id="brandInput" placeholder="Marka" required />
+                                    <label for="brandInput" class="text-muted">Marka (Örn: Renault)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="CarModel" class="form-control border-secondary" id="modelInput" placeholder="Model" required />
+                                    <label for="modelInput" class="text-muted">Model (Örn: Clio)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mt-4">
+                                <label class="form-label fw-bold text-secondary small text-uppercase">Kategori</label>
+                                <select name="CategoryId" class="form-select form-select-lg border-secondary shadow-sm">
+                                    @foreach (var cat in ViewBag.Categories)
+                                    {
+                                        <option value="@cat.CategoryId">@cat.CategoryName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mt-4">
+                                <label class="form-label fw-bold text-secondary small text-uppercase">Vites Tipi</label>
+                                <select name="GearId" class="form-select form-select-lg border-secondary shadow-sm">
+                                    @foreach (var gear in ViewBag.Gears)
+                                    {
+                                        <option value="@gear.GearId">@gear.GearName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mt-4">
+                                <label class="form-label fw-bold text-secondary small text-uppercase">Yakıt Tipi</label>
+                                <select name="FuelId" class="form-select form-select-lg border-secondary shadow-sm">
+                                    @foreach (var fuel in ViewBag.Fuels)
+                                    {
+                                        <option value="@fuel.FuelId">@fuel.FuelName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="my-5 border-secondary">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/Admin/Car/Index" class="btn btn-outline-danger btn-lg px-4 fw-bold">
+                                İptal Et
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-5 shadow fw-bold">
+                                Aracı Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

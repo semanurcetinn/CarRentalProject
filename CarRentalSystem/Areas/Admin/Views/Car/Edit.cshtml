@@ -1,0 +1,134 @@
+﻿@model CarRentalSystem.Models.Car
+
+<div class="container mt-4">
+    <h2>Araç Düzenle</h2>
+    
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger list-unstyled mb-0" })
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                
+                <input type="hidden" name="CarId" value="@Model.CarId" />
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Plaka</label>
+                        <input type="text" name="CarPlate" class="form-control" value="@Model.CarPlate" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Günlük Fiyat (₺)</label>
+                        <input type="number" step="0.01" name="CarDailyPrice" class="form-control" value="@Model.CarDailyPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" required />
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Marka</label>
+                        <input type="text" name="CarBrand" class="form-control" value="@Model.CarBrand" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Model</label>
+                        <input type="text" name="CarModel" class="form-control" value="@Model.CarModel" required />
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Kategori</label>
+                        <select name="CategoryId" class="form-select" required>
+                            @foreach (var cat in ViewBag.Categories)
+                            {
+                                if (Model.CategoryId == cat.CategoryId)
+                                {
+                                    <option value="@cat.CategoryId" selected>@cat.CategoryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@cat.CategoryId">@cat.CategoryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Vites Tipi</label>
+                        <select name="GearId" class="form-select" required>
+                            @foreach (var gear in ViewBag.Gears)
+                            {
+                                if (Model.GearId == gear.GearId)
+                                {
+                                    <option value="@gear.GearId" selected>@gear.GearName</option>
+                                }
+                                else
+                                {
+                                    <option value="@gear.GearId">@gear.GearName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Yakıt Tipi</label>
+                        <select name="FuelId" class="form-select" required>
+                            @foreach (var fuel in ViewBag.Fuels)
+                            {
+                                if (Model.FuelId == fuel.FuelId)
+                                {
+                                    <option value="@fuel.FuelId" selected>@fuel.FuelName</option>
+                                }
+                                else
+                                {
+                                    <option value="@fuel.FuelId">@fuel.FuelName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Durum</label>
+                    <select name="CarStatus" class="form-select" required>
+                        @if (Model.CarStatus == "Müsait")
+                        {
+                            <option value="Müsait" selected>Müsait</option>
+                            <option value="Bakımda">Bakımda</option>
+                            <option value="Kirada">Kirada</option>
+                        }
+                        else if (Model.CarStatus == "Bakımda")
+                        {
+                            <option value="Müsait">Müsait</option>
+                            <option value="Bakımda" selected>Bakımda</option>
+                            <option value="Kirada">Kirada</option>
+                        }
+                        else
+                        {
+                            <option value="Müsait">Müsait</option>
+                            <option value="Bakımda">Bakımda</option>
+                            <option value="Kirada" selected>Kirada</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Araç Görseli (Değiştirmek istemiyorsanız boş bırakın)</label>
+                    <input type="file" name="CarImage" class="form-control" accept="image/*" />
+                    
+                    @if (!string.IsNullOrEmpty(Model.CarImageUrl))
+                    {
+                        <div class="mt-3">
+                            <small class="text-muted d-block mb-1">Mevcut Görsel:</small>
+                            <img src="@Model.CarImageUrl" alt="Araç Görseli" class="img-thumbnail" style="max-height: 150px; object-fit: cover;" />
+                        </div>
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100 fw-bold">Değişiklikleri Kaydet</button>
+                <a href="/Admin/Car/Index" class="btn btn-secondary w-100 mt-2">İptal Et</a>
+            </form>
+        </div>
+    </div>
+</div>

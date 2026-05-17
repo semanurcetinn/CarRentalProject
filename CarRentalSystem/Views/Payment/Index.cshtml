@@ -1,0 +1,47 @@
+﻿@model CarRentalSystem.Models.Reservation
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3 text-center">
+                    <h4 class="mb-0">Güvenli Ödeme Noktası</h4>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <div class="alert alert-info text-center mb-4">
+                        Ödenecek Tutar: <strong class="fs-3">@Model.TotalAmount ₺</strong>
+                    </div>
+
+                    <form asp-action="Process" method="post">
+                        <input type="hidden" name="ReservationId" value="@Model.ReservationId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Kart Üzerindeki İsim</label>
+                            <input type="text" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kart Numarası</label>
+                            <input type="text" class="form-control" maxlength="16" placeholder="1111222233334444" required />
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <label class="form-label">Son Kullanma Tarihi</label>
+                                <input type="text" class="form-control" placeholder="AA/YY" required />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control" maxlength="3" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 btn-lg fw-bold">Ödemeyi Onayla ve Kirala</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

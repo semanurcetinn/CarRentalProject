@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<CarRentalSystem.Models.Car>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Araç Kiralama</h2>
+
+    <form method="get" action="/Home/Index" class="row g-3 mb-4 bg-light p-3 rounded border">
+        <div class="col-md-5">
+            <label class="form-label">Kategori</label>
+            <select name="categoryId" class="form-select">
+                <option value="0">Tüm Kategoriler</option>
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat.CategoryId">@cat.CategoryName</option>
+                }
+            </select>
+        </div>
+        
+        <div class="col-md-5">
+            <label class="form-label">Vites Tipi</label>
+            <select name="gearId" class="form-select">
+                <option value="0">Tüm Vites Tipleri</option>
+                @foreach (var gear in ViewBag.Gears)
+                {
+                    <option value="@gear.GearId">@gear.GearName</option>
+                }
+            </select>
+        </div>
+        
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var car in Model)
+        {
+            <div class="col">
+                <div class="card h-100 border-secondary">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h5 class="mb-0">@car.CarBrand @car.CarModel</h5>
+                    </div>
+
+                    <img src="@car.CarImageUrl" class="card-img-top" alt="Araç Görseli" style="height: 200px; object-fit: cover;">
+
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Plaka:</strong> @car.CarPlate</li>
+                            <li class="list-group-item"><strong>Günlük Fiyat:</strong> @car.CarDailyPrice ₺</li>
+                            <li class="list-group-item"><strong>Durum:</strong> @car.CarStatus</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white text-center">
+                        <a href="/Reservation/Create/@car.CarId" class="btn btn-success px-4">Kirala</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center mt-4">
+            Seçtiğiniz kriterlere uygun araç bulunamadı.
+        </div>
+    }
+</div>

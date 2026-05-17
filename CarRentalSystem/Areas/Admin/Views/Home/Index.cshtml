@@ -1,0 +1,71 @@
+﻿@model List<CarRentalSystem.Models.Reservation>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Yönetim Paneli</h2>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase">Toplam Ciro</h6>
+                    <h2 class="mb-0 fw-bold">@ViewBag.TotalRevenue ₺</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase">Aktif Kiralamalar</h6>
+                    <h2 class="mb-0 fw-bold">@ViewBag.ActiveReservations</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase">Müsait Araçlar</h6>
+                    <h2 class="mb-0 fw-bold">@ViewBag.AvailableCars</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase">Kayıtlı Müşteriler</h6>
+                    <h2 class="mb-0 fw-bold">@ViewBag.TotalCustomers</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Son 5 İşlem</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Başlangıç</th>
+                        <th>Bitiş</th>
+                        <th>Tutar</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.ReservationId</td>
+                            <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
+                            <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
+                            <td>@item.TotalAmount ₺</td>
+                            <td>@item.ReservationStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

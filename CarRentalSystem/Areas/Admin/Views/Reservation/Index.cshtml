@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<CarRentalSystem.Models.Reservation>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Tüm Rezervasyonlar</h2>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Müşteri Bilgisi</th>
+                        <th>Araç Plaka / Marka</th>
+                        <th>Alış Tarihi</th>
+                        <th>Teslim Tarihi</th>
+                        <th>Toplam Tutar</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.User.UserName @item.User.UserSurname</strong><br />
+                                <small class="text-muted">@item.User.UserEmail</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">@item.Car.CarPlate</span><br />
+                                @item.Car.CarBrand @item.Car.CarModel
+                            </td>
+                            <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
+                            <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
+                            <td class="fw-bold text-success">@item.TotalAmount ₺</td>
+                            <td>
+                                @if (item.ReservationStatus == "Aktif")
+                                {
+                                    <a href="/Admin/Reservation/Complete/@item.ReservationId"
+                                           class="btn btn-sm btn-primary w-100"
+                                           onclick="return confirm('Aracı eksiksiz teslim aldığınızı onaylıyor musunuz?');">
+                                        Teslim Al
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success w-100 py-2">Tamamlandı</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

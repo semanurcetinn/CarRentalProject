@@ -1,0 +1,88 @@
+﻿@model List<CarRentalSystem.Models.Reservation>
+@{
+    var user = ViewBag.UserInfo as CarRentalSystem.Models.User;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3 text-center">
+                    <h5 class="mb-0">Profil Bilgilerim</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small d-block">Ad Soyad</label>
+                        <span class="fw-bold fs-5 text-dark">@user.UserName @user.UserSurname</span>
+                    </div>
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small d-block">E-posta Adresi</label>
+                        <span class="fw-bold">@user.UserEmail</span>
+                    </div>
+                    <div class="mb-0 pb-2">
+                        <label class="text-muted small d-block">Ehliyet Numarası</label>
+                        <span class="fw-bold">@user.UserLicenseNo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0">Kiralama Geçmişim</h5>
+                </div>
+                <div class="card-body p-4">
+                    
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-warning text-center mb-0">
+                            Henüz sistemimizden bir araç kiralamadınız.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Araç Bilgisi</th>
+                                        <th>Alış Tarihi</th>
+                                        <th>Teslim Tarihi</th>
+                                        <th>Toplam Tutar</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="fw-bold text-dark">@item.Car.CarBrand @item.Car.CarModel</span><br />
+                                                <span class="badge bg-secondary font-monospace">@item.Car.CarPlate</span>
+                                            </td>
+                                            <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
+                                            <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
+                                            <td class="fw-bold text-success">@item.TotalAmount ₺</td>
+                                            <td>
+                                                @if (item.Car.CarStatus == "Kirada" && item.EndDate >= DateTime.Today)
+                                                {
+                                                    <span class="badge bg-warning text-dark">Aktif Kirada</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Tamamlandı</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
